@@ -63,8 +63,8 @@ or without `--net=host`, but P2P direct connection can not work.
 For systems using SELinux, replacing `/root` by `/root:z` is required for the containers to run correctly. Alternatively, SELinux container separation can be disabled completely adding the option `--security-opt label=disable`.
 
 ```bash
-docker run --name hbbs -p 31215:31215 -p 31216:31216 -p 31216:31216/udp -p 21118:21118 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbs -r <relay-server-ip[:port]> 
-docker run --name hbbr -p 31217:31217 -p 21119:21119 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbr 
+docker run --name hbbs -p 31215:31215 -p 31216:31216 -p 31216:31216/udp -p 31218:31218 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbs -r <relay-server-ip[:port]> 
+docker run --name hbbr -p 31217:31217 -p 31219:31219 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbr 
 ```
 
 The `relay-server-ip` parameter is the IP address (or dns name) of the server running these containers. The **optional** `port` parameter has to be used if you use a port different than **31217** for `hbbr`.
@@ -85,7 +85,7 @@ services:
       - 31215:31215
       - 31216:31216
       - 31216:31216/udp
-      - 21118:21118
+      - 31218:31218
     image: rustdesk/rustdesk-server:latest
     command: hbbs -r rustdesk.example.com:31217
     volumes:
@@ -100,7 +100,7 @@ services:
     container_name: hbbr
     ports:
       - 31217:31217
-      - 21119:21119
+      - 31219:31219
     image: rustdesk/rustdesk-server:latest
     command: hbbr
     volumes:
@@ -158,7 +158,7 @@ or without `--net=host`, but P2P direct connection cannot work.
 ```bash
 docker run --name rustdesk-server \
   -p 31215:31215 -p 31216:31216 -p 31216:31216/udp \
-  -p 31217:31217 -p 21118:21118 -p 21119:21119 \
+  -p 31217:31217 -p 31218:31218 -p 31219:31219 \
   -e "RELAY=rustdeskrelay.example.com" \
   -e "ENCRYPTED_ONLY=1" \
   -v "$PWD/data:/data" -d rustdesk/rustdesk-server-s6:latest
@@ -177,8 +177,8 @@ services:
       - 31216:31216
       - 31216:31216/udp
       - 31217:31217
-      - 21118:21118
-      - 21119:21119
+      - 31218:31218
+      - 31219:31219
     image: rustdesk/rustdesk-server-s6:latest
     environment:
       - "RELAY=rustdesk.example.com:31217"
@@ -231,8 +231,8 @@ services:
       - 31216:31216
       - 31216:31216/udp
       - 31217:31217
-      - 21118:21118
-      - 21119:21119
+      - 31218:31218
+      - 31219:31219
     image: rustdesk/rustdesk-server-s6:latest
     environment:
       - "RELAY=rustdesk.example.com:31217"
@@ -275,8 +275,8 @@ services:
       - 31216:31216
       - 31216:31216/udp
       - 31217:31217
-      - 21118:21118
-      - 21119:21119
+      - 31218:31218
+      - 31219:31219
     image: rustdesk/rustdesk-server-s6:latest
     environment:
       - "RELAY=rustdesk.example.com:31217"

@@ -63,8 +63,8 @@ docker run --name hbbr --net=host -v "$PWD/data:/root" -d rustdesk/rustdesk-serv
 对于使用了 SELinux 的系统，您需要将 ``/root`` 替换为 ``/root:z``，以保证容器的正常运行。或者，也可以通过添加参数 ``--security-opt label=disable`` 来完全禁用 SELinux 容器隔离。
 
 ```bash
-docker run --name hbbs -p 31215:31215 -p 31216:31216 -p 31216:31216/udp -p 21118:21118 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbs -r <relay-server-ip[:port]> 
-docker run --name hbbr -p 31217:31217 -p 21119:21119 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbr 
+docker run --name hbbs -p 31215:31215 -p 31216:31216 -p 31216:31216/udp -p 31218:31218 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbs -r <relay-server-ip[:port]> 
+docker run --name hbbr -p 31217:31217 -p 31219:31219 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbr 
 ```
 
 `relay-server-ip` 参数是运行这些容器的服务器的 IP 地址（或 DNS 名称）。如果你不想使用 **31217** 作为 `hbbr` 的服务端口,可使用可选参数 `port` 进行指定。
@@ -85,7 +85,7 @@ services:
       - 31215:31215
       - 31216:31216
       - 31216:31216/udp
-      - 21118:21118
+      - 31218:31218
     image: rustdesk/rustdesk-server:latest
     command: hbbs -r rustdesk.example.com:31217
     volumes:
@@ -100,7 +100,7 @@ services:
     container_name: hbbr
     ports:
       - 31217:31217
-      - 21119:21119
+      - 31219:31219
     image: rustdesk/rustdesk-server:latest
     command: hbbr
     volumes:
@@ -156,7 +156,7 @@ docker run --name rustdesk-server \
 ```bash
 docker run --name rustdesk-server \
   -p 31215:31215 -p 31216:31216 -p 31216:31216/udp \
-  -p 31217:31217 -p 21118:21118 -p 21119:21119 \
+  -p 31217:31217 -p 31218:31218 -p 31219:31219 \
   -e "RELAY=rustdeskrelay.example.com" \
   -e "ENCRYPTED_ONLY=1" \
   -v "$PWD/data:/data" -d rustdesk/rustdesk-server-s6:latest
@@ -175,8 +175,8 @@ services:
       - 31216:31216
       - 31216:31216/udp
       - 31217:31217
-      - 21118:21118
-      - 21119:21119
+      - 31218:31218
+      - 31219:31219
     image: rustdesk/rustdesk-server-s6:latest
     environment:
       - "RELAY=rustdesk.example.com:31217"
@@ -229,8 +229,8 @@ services:
       - 31216:31216
       - 31216:31216/udp
       - 31217:31217
-      - 21118:21118
-      - 21119:21119
+      - 31218:31218
+      - 31219:31219
     image: rustdesk/rustdesk-server-s6:latest
     environment:
       - "RELAY=rustdesk.example.com:31217"
@@ -273,8 +273,8 @@ services:
       - 31216:31216
       - 31216:31216/udp
       - 31217:31217
-      - 21118:21118
-      - 21119:21119
+      - 31218:31218
+      - 31219:31219
     image: rustdesk/rustdesk-server-s6:latest
     environment:
       - "RELAY=rustdesk.example.com:31217"
